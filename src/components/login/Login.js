@@ -2,14 +2,31 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import InputGroup from "../inputGroup/InputGroup";
 import { Link } from "react-router-dom";
+import handleLogin from "../../api/handleLogin";
+import useCheck from "../../hooks/useCheck";
+import { checkEmail, checkPassword } from "../../function/checkSignup";
 
 function Login() {
   const LOGIN_URL = `https://pre-onboarding-selection-task.shop/auth/signin`;
 
-  const [userId, setuserId] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState("");
-  const [isConfirm, setIsConfirm] = useState(false);
+  // const [isConfirm, setIsConfirm] = useState(false);
+
+  // 유효성 검사 state
+  const [isEmail, setIsEmail] = useState(false);
+  const [ispassword, setIsPassword] = useState(false);
+
+  // 커스텀 훅
+  useCheck(checkEmail, email, setIsEmail);
+  useCheck(checkPassword, password, setIsPassword);
+
+  /** 로그인 제출 함수 */
+  const submitLogin = async (event) => {
+    event.preventDefault();
+    handleLogin(LOGIN_URL, email, password, setErrors);
+  };
 
   return (
     <LoginFrame>
@@ -18,10 +35,16 @@ function Login() {
       <LoginForm>
         <InputGroup
           placeholder="이메일"
-          value={userId}
-          setValue={setuserId}
+          value={email}
+          setValue={setEmail}
           // error={error.userId}
         />
+
+        {isEmail === true ? (
+          <></>
+        ) : (
+          <ContentCheck>올바른 형식의 이메일을 입력해주세요(@ 필수 포함)</ContentCheck>
+        )}
 
         <InputGroup
           placeholder="비밀번호"
@@ -30,6 +53,12 @@ function Login() {
           type="password"
           // error={error.email}
         />
+
+        {ispassword === true ? (
+          <></>
+        ) : (
+          <ContentCheck>8자 이상의 비밀번호를 입력해주세요</ContentCheck>
+        )}
 
         {errors.length !== 0 ? (
           <>
@@ -40,7 +69,15 @@ function Login() {
           <></>
         )}
 
-        <LoginButton>로그인</LoginButton>
+        {isEmail && ispassword ? (
+          <button type="button" className="allow-button" onClick={submitLogin}>
+            로그인
+          </button>
+        ) : (
+          <button type="button" className="block-button">
+            로그인
+          </button>
+        )}
 
         <SignupContainer>
           <div>계정이 없으신가요?</div>
@@ -104,32 +141,30 @@ const LoginForm = styled.form`
     margin: 8px 0;
     width: 400px;
   }
-`;
 
-const LoginButton = styled.button`
-  margin-top: 20px;
-  width: 400px;
-  height: 45px;
-  border-radius: 5px;
-  border: 1px solid;
-  background-color: green;
-  color: #ffffff;
-  font-weight: bold;
-  letter-spacing: 2px;
-  transition: transform 5ms ease-in;
-
-  cursor: pointer;
-
-  &:active {
+  .allow-button:active {
     transform: scale(0.99);
   }
 
-  &:hover {
+  .allow-button:focus {
+    outline: none;
+  }
+
+  .allow-button.ghost {
+    background-color: transparent;
+    border-color: #ffffff;
+  }
+
+  .allow-button:hover {
     opacity: 0.93;
   }
 
-  p {
-    opacity: 0.7;
+  .block-button {
+    opacity: 0.5;
+  }
+
+  .block-button:hover {
+    opacity: 0.5;
   }
 `;
 
@@ -143,6 +178,13 @@ const SignupContainer = styled.div`
     text-decoration: none;
     color: gray;
   }
+`;
+
+const ContentCheck = styled.p`
+  margin: 0px auto 15px 10px;
+  font-size: 13px;
+  color: red;
+  opacity: 0.8;
 `;
 
 export default Login;
