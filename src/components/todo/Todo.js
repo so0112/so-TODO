@@ -37,7 +37,7 @@ function Todo() {
         </button>
       </TodoForm>
 
-      <TodoList datas={datas} setDatas={setDatas} />
+      <TodoList datas={datas} setDatas={setDatas} todo={todo} setTodo={setTodo} />
     </TodoFrame>
   );
 }
