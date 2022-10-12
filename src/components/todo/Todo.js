@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import InputGroup from "../inputGroup/InputGroup";
-import { postTodo, getTodos } from "../../api/handleTodo";
+import { postTodo, getTodos } from "../../api/axiosTodo";
 import TodoList from "./TodoList";
 
 function Todo() {
@@ -14,7 +14,6 @@ function Todo() {
     getTodos(TODO_URL, setDatas); // 닉네임 로컬 스토리지 저장
   }, []);
 
-  /** todo 제출 함수 */
   const submitTodo = async (event) => {
     event.preventDefault();
     postTodo(todo, setTodo, datas, setDatas);
@@ -22,7 +21,7 @@ function Todo() {
 
   return (
     <TodoFrame>
-      <TodoForm>
+      <TodoForm onSubmit={submitTodo}>
         <h1>Todo 생성</h1>
         <InputGroup
           placeholder="투두리스트"
@@ -31,7 +30,7 @@ function Todo() {
           // error={error.userId}
         />
 
-        <button type="button" className onClick={submitTodo}>
+        <button type="button" onClick={submitTodo}>
           할일 목록 생성
         </button>
       </TodoForm>
@@ -41,7 +40,7 @@ function Todo() {
   );
 }
 
-/** div - 로그인 프레임 */
+/** div -  Todo 프레임 */
 const TodoFrame = styled.div`
   position: relative;
 
@@ -51,7 +50,7 @@ const TodoFrame = styled.div`
   align-items: center;
 `;
 
-/**form - 아이디, 비밀번호, 로그인 버튼 */
+/**form - Todo */
 const TodoForm = styled.form`
   width: 500px;
   height: 250px;
