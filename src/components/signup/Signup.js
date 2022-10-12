@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import InputGroup from "../inputGroup/InputGroup";
 import useCheck from "../../hooks/useCheck";
-import handleSignup from "../../api/handleSignup";
+import { postSignup } from "../../api/axiosSignup";
 import { checkEmail, checkPassword, cofirmPassword } from "../../function/checkSignup";
 
 function Signup() {
@@ -34,7 +34,7 @@ function Signup() {
   /** 회원가입 axios 요청 버튼 */
   const submitSignup = (e) => {
     console.log("signup click");
-    handleSignup(SIGNUP_URL, email, password, setErrors);
+    postSignup(SIGNUP_URL, email, password, setErrors);
   };
 
   return (

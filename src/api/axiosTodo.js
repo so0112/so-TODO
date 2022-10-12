@@ -52,7 +52,7 @@ export const postTodo = async (todo, setTodo, datas, setDatas) => {
   }
 };
 
-export const handleTodoDelete = async (TODO_DEL_URL, datas, setDatas) => {
+export const deleteTodo = async (TODO_DEL_URL, datas, setDatas) => {
   await axios
     .delete(TODO_DEL_URL, {
       headers: {
