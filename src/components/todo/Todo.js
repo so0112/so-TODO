@@ -5,20 +5,19 @@ import { postTodo, getTodos } from "../../api/handleTodo";
 import TodoList from "./TodoList";
 
 function Todo() {
-  const TODO_CREATE_URL = `https://pre-onboarding-selection-task.shop/todos`;
-  const TODO_GET_URL = "https://pre-onboarding-selection-task.shop/todos";
+  const TODO_URL = "https://pre-onboarding-selection-task.shop/todos";
 
   const [todo, setTodo] = useState("");
   const [datas, setDatas] = useState([]);
 
   useEffect(() => {
-    getTodos(TODO_GET_URL, setDatas); // 닉네임 로컬 스토리지 저장
+    getTodos(TODO_URL, setDatas); // 닉네임 로컬 스토리지 저장
   }, []);
 
   /** todo 제출 함수 */
   const submitTodo = async (event) => {
     event.preventDefault();
-    postTodo(TODO_CREATE_URL, todo, setTodo, datas, setDatas);
+    postTodo(todo, setTodo, datas, setDatas);
   };
 
   return (

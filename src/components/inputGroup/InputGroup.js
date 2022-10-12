@@ -24,6 +24,7 @@ const InputLayout = styled.div`
   input {
     margin-top: 15px;
     height: 50px;
+    max-width: 1000px;
     border-radius: 5px;
   }
 `;

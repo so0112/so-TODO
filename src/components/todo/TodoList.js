@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import InputGroup from "../inputGroup/InputGroup";
-import { handleTodoDelete, handleComplete, putModify } from "../../api/handleTodo";
+import { handleTodoDelete, handleCheck, putModify } from "../../api/handleTodo";
+import { BsCheckCircle, BsCircle } from "react-icons/bs";
 
 function TodoList({ datas, setDatas, todo, setTodo }) {
   const TODO_URL = "https://pre-onboarding-selection-task.shop/todos";
@@ -19,10 +20,21 @@ function TodoList({ datas, setDatas, todo, setTodo }) {
 
   return (
     <TodoListContainer>
-      <h1>Todo 목록</h1>
+      <h1>남은 할일 {datas.filter((el) => el.isCompleted === false).length} 개</h1>
       {datas.map((el) => (
-        <div className="todo-item">
-          <input type="checkbox" onClick={handleComplete(el.id, el.todo, el.isCompleted)} />
+        <div className="todo-item" key={el.id}>
+          {el.isCompleted ? (
+            <BsCheckCircle
+              className="done"
+              onClick={() => handleCheck(el.id, el.todo, el.isCompleted, setDatas)}
+            />
+          ) : (
+            <BsCircle
+              className="doing"
+              onClick={() => handleCheck(el.id, el.todo, el.isCompleted, setDatas)}
+            />
+          )}
+          {/* TODO PUT 수정중인 id는 input창 뜨도록 작성 */}
           {isModifying === el.id ? (
             <>
               <InputGroup
@@ -32,7 +44,18 @@ function TodoList({ datas, setDatas, todo, setTodo }) {
                 // error={error.userId}
               />
               <div className="modify-button-area">
-                <div className="modify-button" onClick={() => putModify}>
+                <div
+                  className="modify-button"
+                  onClick={() =>
+                    putModify(
+                      el.id,
+                      modifyTodo,
+                      el.isCompleted,
+                      setIsModifying,
+                      setModifyTodo,
+                      setDatas
+                    )
+                  }>
                   확인
                 </div>
                 <div className="delete-button" onClick={cancelModify}>
