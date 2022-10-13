@@ -5,7 +5,6 @@ import styled from "styled-components";
 const isLogin = Boolean(localStorage.getItem("token"));
 
 function TodoPage() {
-  // 토큰 유무 확인
   if (!isLogin) {
     window.location.replace("/");
   }
@@ -22,7 +21,7 @@ const TodoLayout = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100vh;
+  height: 100%;
 `;
 
 export default TodoPage;
