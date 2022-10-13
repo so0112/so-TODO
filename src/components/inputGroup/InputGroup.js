@@ -1,6 +1,6 @@
 import React from "react";
 
-const InputGroup = ({ type = "text", placeholder = "", value, setValue }) => {
+const InputGroup = ({ type = "text", placeholder = "", value, setValue, setIsError }) => {
   return (
     <div>
       <input
@@ -8,6 +8,7 @@ const InputGroup = ({ type = "text", placeholder = "", value, setValue }) => {
         placeholder={placeholder}
         value={value}
         onChange={(e) => setValue(e.target.value)}
+        onClick={(e) => setIsError(false)}
       />
     </div>
   );

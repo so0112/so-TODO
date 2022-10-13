@@ -1,40 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import InputGroup from "../inputGroup/InputGroup";
 import useCheck from "../../hooks/useCheck";
 import { postSignup } from "../../api/axiosSignup";
-import { checkEmail, checkPassword, cofirmPassword } from "../../function/checkSignup";
+import { checkEmail, checkPassword } from "../../function/checkSignup";
 
 function Signup() {
   const SIGNUP_URL = `https://pre-onboarding-selection-task.shop/auth/signup`;
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [password2, setPassword2] = useState("");
-  const [errors, setErrors] = useState("");
 
   // 유효성 검사 state
   const [isEmail, setIsEmail] = useState(false);
   const [ispassword, setIsPassword] = useState(false);
-  const [isPasswordConfirm, setPassWordConfirm] = useState(false);
+  const [isError, setIsError] = useState(false);
 
-  // 커스텀 훅
+  // 유효성 검사 커스텀 훅
   useCheck(checkEmail, email, setIsEmail);
   useCheck(checkPassword, password, setIsPassword);
-
-  useEffect(() => {
-    if (cofirmPassword(password, password2) === false) {
-      setPassWordConfirm(false);
-    } else if (cofirmPassword(password, password2) === true) {
-      setPassWordConfirm(true);
-    }
-  }, [password2]);
 
   /** 회원가입 axios 요청 버튼 */
   const submitSignup = (e) => {
     console.log("signup click");
-    postSignup(SIGNUP_URL, email, password, setErrors);
+    postSignup(SIGNUP_URL, email, password, setIsError);
   };
 
   return (
@@ -46,9 +36,11 @@ function Signup() {
           placeholder="이메일"
           value={email}
           setValue={setEmail}
-          // error={error.email}
+          setIsError={setIsError}
         />
-        {isEmail === true ? (
+        {isError === true ? (
+          <ContentCheck>중복된 계정입니다.</ContentCheck>
+        ) : isEmail === true ? (
           <></>
         ) : (
           <ContentCheck>올바른 형식의 이메일을 입력해주세요(@ 필수 포함)</ContentCheck>
@@ -59,26 +51,14 @@ function Signup() {
           value={password}
           setValue={setPassword}
           type="password"
-          // error={errors.password}
         />
         {ispassword === true ? (
           <></>
         ) : (
           <ContentCheck>8자 이상의 비밀번호를 입력해주세요</ContentCheck>
         )}
-        <InputGroup
-          placeholder="비밀번호 확인"
-          type="password"
-          value={password2}
-          setValue={setPassword2}
-          // error={errors.password}
-        />
-        {isPasswordConfirm === true ? (
-          <></>
-        ) : (
-          <ContentCheck>비밀번호가 일치하지 않습니다.</ContentCheck>
-        )}
-        {isEmail && ispassword && password2.length !== 0 && isPasswordConfirm ? (
+
+        {isEmail && ispassword ? (
           <button type="button" className="allow-signup" onClick={submitSignup}>
             가입하기
           </button>

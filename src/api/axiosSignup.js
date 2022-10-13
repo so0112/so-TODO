@@ -22,6 +22,6 @@ export const postSignup = async (SIGNUP_URL, email, password, setErrors) => {
     window.location.replace("/");
   } catch (error) {
     console.log("error", error);
-    setErrors(error);
+    setErrors(true);
   }
 };
