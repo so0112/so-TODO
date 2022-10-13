@@ -3,11 +3,13 @@ import axios from "axios";
 const TODO_URL = "https://pre-onboarding-selection-task.shop/todos";
 const token = `Bearer ${localStorage.getItem("token")}`;
 
-// Todo Get 요청
-export const getTodos = async (URL, setDatas) => {
+/** getTodos(setState)
+ * setState : setDatas
+ */
+export const getTodos = async ({ setDatas }) => {
   try {
     await axios
-      .get(URL, {
+      .get(TODO_URL, {
         headers: {
           Authorization: token,
         },
@@ -18,52 +20,47 @@ export const getTodos = async (URL, setDatas) => {
   }
 };
 
-export const postTodo = async (todo, setTodo, datas, setDatas) => {
-  try {
-    await axios
-      .post(
-        TODO_URL,
-        {
-          todo,
+export const postTodo = async ({ todo, setTodo, datas, setDatas }) => {
+  await axios
+    .post(
+      TODO_URL,
+      {
+        todo,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
         },
+      }
+    )
+    .then((res) => {
+      setDatas([
+        ...datas,
         {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-          },
-        }
-      )
-      .then((res) => {
-        setDatas([
-          ...datas,
-          {
-            id: res.data.id,
-            todo: res.data.todo,
-            isCompleted: res.data.isCompleted,
-            userId: res.data.userId,
-          },
-        ]);
-        setTodo("");
-      })
-      .catch((err) => console.log(err));
-  } catch (error) {
-    console.log("error", error);
-    setTodo("");
-  }
+          id: res.data.id,
+          todo: res.data.todo,
+          isCompleted: res.data.isCompleted,
+          userId: res.data.userId,
+        },
+      ]);
+      setTodo("");
+    })
+    .catch((err) => console.log(err));
 };
 
-export const deleteTodo = async (TODO_DEL_URL, datas, setDatas) => {
+export const deleteTodo = async ({ id, setDatas }) => {
   await axios
-    .delete(TODO_DEL_URL, {
+    .delete(`${TODO_URL}/${id}`, {
       headers: {
         Authorization: token,
       },
     })
-    .then((res) => getTodos(TODO_URL, setDatas))
+    .then((res) => getTodos({ setDatas }))
     .catch((err) => console.log(err));
 };
 
-export const handleCheck = async (id, todo, isCompleted, setDatas) => {
+export const postTodoCheck = async ({ id, todo, isCompleted, setDatas }) => {
   await axios
     .put(
       `${TODO_URL}/${id}`,
@@ -78,18 +75,25 @@ export const handleCheck = async (id, todo, isCompleted, setDatas) => {
         },
       }
     )
-    .then((res) => getTodos(TODO_URL, setDatas))
+    .then((res) => getTodos({ setDatas }))
     .catch((err) => console.log(err));
 };
 
-export const putModify = async (
+/**putModify({
+ * id : todo id값,
+ * modifyTodo : 수정할 todo 데이터,
+ * isCompleted : todo 완료 여부,
+ * setIsModifying: 데이터 상태 수정,
+ * setModifyTodo,
+ * setDatas,}) */
+export const putModify = async ({
   id,
   modifyTodo,
   isCompleted,
   setIsModifying,
   setModifyTodo,
-  setDatas
-) => {
+  setDatas,
+}) => {
   await axios
     .put(
       `${TODO_URL}/${id}`,
@@ -105,28 +109,9 @@ export const putModify = async (
       }
     )
     .then((res) => {
-      console.log(res);
       setIsModifying();
       setModifyTodo("");
-      getTodos(TODO_URL, setDatas);
-    });
-};
-
-///////////////////////////////////////////////////////////////////
-const handleCompleted = async (id, isCompleted) => {
-  await axios
-    .put(
-      `${URL}/${id}`,
-      {
-        isCompleted: !isCompleted,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-      }
-    )
-    .then((res) => getTodos(TODO_URL))
+      getTodos({ setDatas });
+    })
     .catch((err) => console.log(err));
 };
