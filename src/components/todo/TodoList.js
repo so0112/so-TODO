@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import InputGroup from "../inputGroup/InputGroup";
-import { handleTodoDelete, handleCheck, putModify } from "../../api/handleTodo";
-import { BsCheckCircle, BsCircle } from "react-icons/bs";
+import { deleteTodo, postTodoCheck, putModify } from "../../api/axiosTodo";
+import { BsCheckCircle, BsCircle, BsFillTrashFill, BsFillPencilFill } from "react-icons/bs";
 
-function TodoList({ datas, setDatas, todo, setTodo }) {
-  const TODO_URL = "https://pre-onboarding-selection-task.shop/todos";
+function TodoList({ datas, setDatas }) {
   const [isModifying, setIsModifying] = useState();
   const [modifyTodo, setModifyTodo] = useState("");
 
@@ -22,16 +21,25 @@ function TodoList({ datas, setDatas, todo, setTodo }) {
     <TodoListContainer>
       <h1>남은 할일 {datas.filter((el) => el.isCompleted === false).length} 개</h1>
       {datas.map((el) => (
-        <div className="todo-item" key={el.id}>
+        <div className="todo-list-area" key={el.id}>
           {el.isCompleted ? (
             <BsCheckCircle
-              className="done"
-              onClick={() => handleCheck(el.id, el.todo, el.isCompleted, setDatas)}
+              className="done check-area"
+              onClick={() =>
+                postTodoCheck({
+                  id: el.id,
+                  todo: el.todo,
+                  isCompleted: el.isCompleted,
+                  setDatas,
+                })
+              }
             />
           ) : (
             <BsCircle
-              className="doing"
-              onClick={() => handleCheck(el.id, el.todo, el.isCompleted, setDatas)}
+              className="doing check-area"
+              onClick={() =>
+                postTodoCheck({ id: el.id, todo: el.todo, isCompleted: el.isCompleted, setDatas })
+              }
             />
           )}
           {/* TODO PUT 수정중인 id는 input창 뜨도록 작성 */}
@@ -41,20 +49,20 @@ function TodoList({ datas, setDatas, todo, setTodo }) {
                 placeholder="투두리스트"
                 value={modifyTodo}
                 setValue={setModifyTodo}
-                // error={error.userId}
+                className="todo-list"
               />
               <div className="modify-button-area">
                 <div
                   className="modify-button"
                   onClick={() =>
-                    putModify(
-                      el.id,
+                    putModify({
+                      id: el.id,
                       modifyTodo,
-                      el.isCompleted,
+                      isCompleted: el.isCompleted,
                       setIsModifying,
                       setModifyTodo,
-                      setDatas
-                    )
+                      setDatas,
+                    })
                   }>
                   확인
                 </div>
@@ -65,16 +73,14 @@ function TodoList({ datas, setDatas, todo, setTodo }) {
             </>
           ) : (
             <>
-              <div className="todo-list">{el.todo}</div>
+              <div className={`todo-list ${el.isCompleted ? "done-list" : ""}`}>{el.todo}</div>
               <div className="button-area">
-                <div className="modify-button" onClick={() => startModify(el)}>
-                  수정
-                </div>
-                <div
+                <BsFillPencilFill className="modify-button" onClick={() => startModify(el)} />
+
+                <BsFillTrashFill
                   className="delete-button"
-                  onClick={() => handleTodoDelete(`${TODO_URL}/${el.id}`, datas, setDatas)}>
-                  삭제
-                </div>
+                  onClick={() => deleteTodo({ id: el.id, setDatas })}
+                />
               </div>
             </>
           )}
@@ -90,19 +96,39 @@ const TodoListContainer = styled.div`
   margin-top: 10px;
   padding: 15px;
   border-radius: 10px;
-  border: 1px solid black;
-  /* box-shadow: 5px 14px 28px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.22); */
 
-  .todo-item {
-    margin: 10px;
+  input {
+    background-color: #eee;
+    border: none;
+    padding: 12px 15px;
+    width: 300px;
+    margin-left: 10px;
+  }
+
+  .check-area {
+    font-size: 25px;
+  }
+
+  .todo-list-area {
+    margin: 30px;
     display: flex;
     align-items: center;
+    justify-content: center;
+  }
+
+  .todo-list {
+    margin-left: 10px;
+  }
+
+  .done-list {
+    opacity: 0.3;
   }
 
   .button-area {
     display: flex;
     margin-left: auto;
     cursor: pointer;
+    color: gray;
   }
 
   .modify-button-area {
@@ -110,16 +136,22 @@ const TodoListContainer = styled.div`
     margin-left: auto;
     cursor: pointer;
   }
+
   .modify-button {
-    padding: 10px;
-    border: 1px solid black;
     cursor: pointer;
   }
 
+  .modify-button:hover {
+    color: blue;
+  }
+
   .delete-button {
-    padding: 10px;
-    border: 1px solid black;
+    margin-left: 10px;
     cursor: pointer;
+  }
+
+  .delete-button:hover {
+    color: red;
   }
 `;
 

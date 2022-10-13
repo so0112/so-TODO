@@ -4,7 +4,7 @@ import axios from "axios";
  * handleLogin(URL, 아이디, 비밀번호, dispatch)
  */
 
-const handleLogin = async (LOGIN_URL, email, password) => {
+export const postLogin = async (LOGIN_URL, email, password) => {
   try {
     const res = await axios.post(
       LOGIN_URL,
@@ -25,5 +25,3 @@ const handleLogin = async (LOGIN_URL, email, password) => {
     console.log(error);
   }
 };
-
-export default handleLogin;

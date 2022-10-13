@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import InputGroup from "../inputGroup/InputGroup";
 import { Link } from "react-router-dom";
-import handleLogin from "../../api/handleLogin";
+import { postLogin } from "../../api/axiosLogin";
 import useCheck from "../../hooks/useCheck";
 import { checkEmail, checkPassword } from "../../function/checkSignup";
 
@@ -25,7 +25,7 @@ function Login() {
   /** 로그인 제출 함수 */
   const submitLogin = async (event) => {
     event.preventDefault();
-    handleLogin(LOGIN_URL, email, password, setErrors);
+    postLogin(LOGIN_URL, email, password, setErrors);
   };
 
   return (
