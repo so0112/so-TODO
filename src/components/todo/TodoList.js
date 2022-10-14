@@ -2,7 +2,14 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import InputGroup from "../inputGroup/InputGroup";
 import { deleteTodo, postTodoCheck, putModify } from "../../api/axiosTodo";
-import { BsCheckCircle, BsCircle, BsFillTrashFill, BsFillPencilFill } from "react-icons/bs";
+import {
+  BsCheckCircle,
+  BsCircle,
+  BsFillTrashFill,
+  BsFillPencilFill,
+  BsCheckLg,
+  BsXLg,
+} from "react-icons/bs";
 
 function TodoList({ datas, setDatas }) {
   const [isModifying, setIsModifying] = useState();
@@ -52,8 +59,8 @@ function TodoList({ datas, setDatas }) {
                 className="todo-list"
               />
               <div className="modify-button-area">
-                <div
-                  className="modify-button"
+                <BsCheckLg
+                  className="modify-post-button"
                   onClick={() =>
                     putModify({
                       id: el.id,
@@ -63,12 +70,9 @@ function TodoList({ datas, setDatas }) {
                       setModifyTodo,
                       setDatas,
                     })
-                  }>
-                  확인
-                </div>
-                <div className="delete-button" onClick={cancelModify}>
-                  취소
-                </div>
+                  }
+                />
+                <BsXLg className="modify-cancel-button" onClick={cancelModify} />
               </div>
             </>
           ) : (
@@ -134,7 +138,6 @@ const TodoListContainer = styled.div`
   .modify-button-area {
     display: flex;
     margin-left: auto;
-    cursor: pointer;
   }
 
   .modify-button {
@@ -144,7 +147,15 @@ const TodoListContainer = styled.div`
   .modify-button:hover {
     color: blue;
   }
-
+  .modify-post-button {
+    color: green;
+    cursor: pointer;
+  }
+  .modify-cancel-button {
+    margin-left: 10px;
+    color: red;
+    cursor: pointer;
+  }
   .delete-button {
     margin-left: 10px;
     cursor: pointer;
