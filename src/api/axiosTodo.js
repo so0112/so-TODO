@@ -3,9 +3,6 @@ import axios from "axios";
 const TODO_URL = "https://pre-onboarding-selection-task.shop/todos";
 const token = `Bearer ${localStorage.getItem("token")}`;
 
-/** getTodos(setState)
- * setState : setDatas
- */
 export const getTodos = async ({ setDatas }) => {
   try {
     await axios
