@@ -5,8 +5,8 @@ import axios from "axios";
  */
 
 export const postLogin = async (LOGIN_URL, email, password) => {
-  try {
-    const res = await axios.post(
+  await axios
+    .post(
       LOGIN_URL,
       {
         email,
@@ -17,11 +17,12 @@ export const postLogin = async (LOGIN_URL, email, password) => {
           "Content-Type": "application/json",
         },
       }
-    );
-    console.log("res : ", res);
-    localStorage.setItem("token", res.data["access_token"]);
-    window.location.replace("/todo");
-  } catch (error) {
-    console.log(error);
-  }
+    )
+    .then((res) => {
+      localStorage.setItem("token", res.data["access_token"]);
+      window.location.replace("/todo");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };

@@ -5,8 +5,8 @@ import axios from "axios";
  */
 
 export const postSignup = async (SIGNUP_URL, email, password, setErrors) => {
-  try {
-    const res = await axios.post(
+  await axios
+    .post(
       SIGNUP_URL,
       {
         email,
@@ -17,11 +17,9 @@ export const postSignup = async (SIGNUP_URL, email, password, setErrors) => {
           "Content-Type": "application/json",
         },
       }
-    );
-    console.log("res : ", res);
-    window.location.replace("/");
-  } catch (error) {
-    console.log("error", error);
-    setErrors(true);
-  }
+    )
+    .then((res) => window.location.replace("/"))
+    .catch((error) => {
+      setErrors(true);
+    });
 };

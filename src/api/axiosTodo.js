@@ -3,21 +3,15 @@ import axios from "axios";
 const TODO_URL = "https://pre-onboarding-selection-task.shop/todos";
 const token = `Bearer ${localStorage.getItem("token")}`;
 
-/** getTodos(setState)
- * setState : setDatas
- */
 export const getTodos = async ({ setDatas }) => {
-  try {
-    await axios
-      .get(TODO_URL, {
-        headers: {
-          Authorization: token,
-        },
-      })
-      .then((res) => setDatas(res.data));
-  } catch (error) {
-    console.log(error);
-  }
+  await axios
+    .get(TODO_URL, {
+      headers: {
+        Authorization: token,
+      },
+    })
+    .then((res) => setDatas(res.data))
+    .catch((err) => console.log());
 };
 
 export const postTodo = async ({ todo, setTodo, datas, setDatas }) => {
@@ -46,7 +40,7 @@ export const postTodo = async ({ todo, setTodo, datas, setDatas }) => {
       ]);
       setTodo("");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.log());
 };
 
 export const deleteTodo = async ({ id, setDatas }) => {
@@ -57,7 +51,7 @@ export const deleteTodo = async ({ id, setDatas }) => {
       },
     })
     .then((res) => getTodos({ setDatas }))
-    .catch((err) => console.log(err));
+    .catch((err) => console.log());
 };
 
 export const postTodoCheck = async ({ id, todo, isCompleted, setDatas }) => {
@@ -76,7 +70,7 @@ export const postTodoCheck = async ({ id, todo, isCompleted, setDatas }) => {
       }
     )
     .then((res) => getTodos({ setDatas }))
-    .catch((err) => console.log(err));
+    .catch((err) => console.log());
 };
 
 /**putModify({
@@ -113,5 +107,5 @@ export const putModify = async ({
       setModifyTodo("");
       getTodos({ setDatas });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.log());
 };
