@@ -23,7 +23,6 @@ function Signup() {
 
   /** 회원가입 axios 요청 버튼 */
   const submitSignup = (e) => {
-    console.log("signup click");
     postSignup(SIGNUP_URL, email, password, setIsError);
   };
 
