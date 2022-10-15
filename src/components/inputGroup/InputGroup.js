@@ -1,6 +1,6 @@
 import React from "react";
 
-const InputGroup = ({ type = "text", placeholder = "", value, setValue, setIsError = true }) => {
+const InputGroup = ({ type = "text", placeholder = "", value, setValue, setIsError = Boolean }) => {
   return (
     <div>
       <input
