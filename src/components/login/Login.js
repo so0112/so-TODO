@@ -11,8 +11,7 @@ function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState("");
-  // const [isConfirm, setIsConfirm] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   // 유효성 검사 state
   const [isEmail, setIsEmail] = useState(false);
@@ -25,14 +24,19 @@ function Login() {
   /** 로그인 제출 함수 */
   const submitLogin = async (event) => {
     event.preventDefault();
-    postLogin(LOGIN_URL, email, password, setErrors);
+    postLogin(LOGIN_URL, email, password, setIsError);
   };
 
   return (
     <LoginFrame>
       <h1>로그인</h1>
       <LoginForm onSubmit={submitLogin}>
-        <InputGroup placeholder="이메일" value={email} setValue={setEmail} />
+        <InputGroup
+          placeholder="이메일"
+          value={email}
+          setValue={setEmail}
+          setIsError={setIsError}
+        />
 
         {isEmail === true ? (
           <></>
@@ -45,6 +49,7 @@ function Login() {
           value={password}
           setValue={setPassword}
           type="password"
+          setIsError={setIsError}
         />
 
         {ispassword === true ? (
@@ -53,10 +58,10 @@ function Login() {
           <ContentCheck>8자 이상의 비밀번호를 입력해주세요</ContentCheck>
         )}
 
-        {errors.length !== 0 ? (
+        {isError ? (
           <>
-            <small>이메일 또는 비밀번호를 잘못 입력하셨습니다.</small>
-            <small>입력하신 내용을 다시 확인해주세요.</small>
+            <ContentCheck>이메일 또는 비밀번호를 잘못 입력하셨습니다.</ContentCheck>
+            <ContentCheck>입력하신 내용을 다시 확인해주세요.</ContentCheck>
           </>
         ) : (
           <></>
@@ -173,8 +178,8 @@ const SignupContainer = styled.div`
   }
 `;
 
-const ContentCheck = styled.p`
-  margin: 0px auto 15px 10px;
+const ContentCheck = styled.small`
+  margin: 0px auto 5px 5px;
   font-size: 13px;
   color: red;
   opacity: 0.8;
