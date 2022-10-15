@@ -22,13 +22,14 @@ function Signup() {
   useCheck(checkPassword, password, setIsPassword);
 
   /** 회원가입 axios 요청 버튼 */
-  const submitSignup = (e) => {
+  const submitSignup = (event) => {
+    event.preventDefault();
     postSignup(SIGNUP_URL, email, password, setIsError);
   };
 
   return (
     <SignupFrame>
-      <SignUpForm>
+      <SignUpForm onSubmit={submitSignup}>
         <h1>회원가입</h1>
 
         <InputGroup
@@ -58,7 +59,7 @@ function Signup() {
         )}
 
         {isEmail && ispassword ? (
-          <button type="button" className="allow-signup" onClick={submitSignup}>
+          <button type="submit" className="allow-signup">
             가입하기
           </button>
         ) : (
@@ -66,12 +67,14 @@ function Signup() {
             가입하기
           </button>
         )}
-        <div className="sign-up">
-          <div>이미 계정이 있으신가요?</div>
-          <div className="move-sign-up">
-            <Link to="/">로그인</Link>
+        <LoginContainer>
+          <div>계정이 있으신가요?</div>
+          <div>
+            <Link to="/" className="move-sign-up">
+              로그인
+            </Link>
           </div>
-        </div>
+        </LoginContainer>
       </SignUpForm>
     </SignupFrame>
   );
@@ -204,6 +207,18 @@ const ContentCheck = styled.p`
   font-size: 13px;
   color: red;
   opacity: 0.8;
+`;
+
+const LoginContainer = styled.div`
+  margin: 15px auto 0 0;
+  display: flex;
+
+  .move-sign-up {
+    margin-left: 15px;
+    font-size: 14px;
+    text-decoration: none;
+    color: gray;
+  }
 `;
 
 export default Signup;
