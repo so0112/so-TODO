@@ -15,14 +15,14 @@ function TodoList({ datas, setDatas }) {
   const [isModifying, setIsModifying] = useState();
   const [modifyTodo, setModifyTodo] = useState("");
 
-  function cancelModify() {
+  const handleCancel = () => {
     setIsModifying();
-  }
+  };
 
-  function startModify(el) {
+  const startModify = (el) => {
     setIsModifying(el.id);
     setModifyTodo(el.todo);
-  }
+  };
 
   return (
     <TodoListContainer>
@@ -52,12 +52,25 @@ function TodoList({ datas, setDatas }) {
           {/* TODO PUT 수정중인 id는 input창 뜨도록 작성 */}
           {isModifying === el.id ? (
             <>
-              <InputGroup
-                placeholder="투두리스트"
-                value={modifyTodo}
-                setValue={setModifyTodo}
-                className="todo-list"
-              />
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  putModify({
+                    id: el.id,
+                    modifyTodo,
+                    isCompleted: el.isCompleted,
+                    setIsModifying,
+                    setModifyTodo,
+                    setDatas,
+                  });
+                }}>
+                <InputGroup
+                  placeholder=""
+                  value={modifyTodo}
+                  setValue={setModifyTodo}
+                  className="todo-list"
+                />
+              </form>
               <div className="modify-button-area">
                 <BsCheckLg
                   className="modify-post-button"
@@ -72,7 +85,7 @@ function TodoList({ datas, setDatas }) {
                     })
                   }
                 />
-                <BsXLg className="modify-cancel-button" onClick={cancelModify} />
+                <BsXLg className="modify-cancel-button" onClick={handleCancel} />
               </div>
             </>
           ) : (
