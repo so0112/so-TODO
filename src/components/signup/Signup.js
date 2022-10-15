@@ -29,7 +29,7 @@ function Signup() {
 
   return (
     <SignupFrame>
-      <SignUpForm onSubmit={() => submitSignup}>
+      <SignUpForm onSubmit={submitSignup}>
         <h1>회원가입</h1>
 
         <InputGroup
