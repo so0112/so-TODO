@@ -12,7 +12,7 @@ function Todo() {
     getTodos({ setDatas });
   }, []);
 
-  const submitTodo = async (event) => {
+  const submitTodo = (event) => {
     event.preventDefault();
     postTodo({ todo, setTodo, datas, setDatas });
   };

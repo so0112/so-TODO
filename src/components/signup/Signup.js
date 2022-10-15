@@ -22,13 +22,14 @@ function Signup() {
   useCheck(checkPassword, password, setIsPassword);
 
   /** 회원가입 axios 요청 버튼 */
-  const submitSignup = (e) => {
+  const submitSignup = (event) => {
+    event.preventDefault();
     postSignup(SIGNUP_URL, email, password, setIsError);
   };
 
   return (
     <SignupFrame>
-      <SignUpForm>
+      <SignUpForm onSubmit={() => submitSignup}>
         <h1>회원가입</h1>
 
         <InputGroup
@@ -58,7 +59,7 @@ function Signup() {
         )}
 
         {isEmail && ispassword ? (
-          <button type="button" className="allow-signup" onClick={submitSignup}>
+          <button type="submit" className="allow-signup">
             가입하기
           </button>
         ) : (

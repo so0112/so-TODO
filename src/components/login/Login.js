@@ -31,14 +31,8 @@ function Login() {
   return (
     <LoginFrame>
       <h1>로그인</h1>
-
-      <LoginForm>
-        <InputGroup
-          placeholder="이메일"
-          value={email}
-          setValue={setEmail}
-          // error={error.userId}
-        />
+      <LoginForm onSubmit={submitLogin}>
+        <InputGroup placeholder="이메일" value={email} setValue={setEmail} />
 
         {isEmail === true ? (
           <></>
@@ -51,7 +45,6 @@ function Login() {
           value={password}
           setValue={setPassword}
           type="password"
-          // error={error.email}
         />
 
         {ispassword === true ? (
@@ -70,7 +63,7 @@ function Login() {
         )}
 
         {isEmail && ispassword ? (
-          <button type="button" className="allow-button" onClick={submitLogin}>
+          <button type="submit" className="allow-button">
             로그인
           </button>
         ) : (
