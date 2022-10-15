@@ -1,13 +1,17 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Login from "../../components/login/Login";
 
-const isLogin = Boolean(localStorage.getItem("token"));
-
 function LoginPage() {
-  // 토큰 유무 확인
-  if (isLogin) {
-    window.location.replace("/todo");
-  }
+  const isLogin = Boolean(localStorage.getItem("token"));
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLogin) {
+      navigate("/todo");
+    }
+  }, [isLogin, navigate]);
 
   return (
     <LoginLayout>
