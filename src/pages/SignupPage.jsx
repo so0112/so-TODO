@@ -1,8 +1,8 @@
-import React from "react";
-import styled from "styled-components";
-import Signup from "../../components/signup/Signup";
+import React from 'react';
+import styled from 'styled-components';
+import { Signup } from '../components';
 
-function SignUpPage() {
+export function SignUpPage() {
   return (
     <SignUpLayout>
       <Signup />
@@ -17,5 +17,3 @@ const SignUpLayout = styled.div`
   width: 100%;
   height: 800px;
 `;
-
-export default SignUpPage;

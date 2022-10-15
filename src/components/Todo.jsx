@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import InputGroup from "../inputGroup/InputGroup";
-import { postTodo, getTodos } from "../../api/axiosTodo";
-import TodoList from "./TodoList";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { postTodo, getTodos } from '../apis/todo';
+import { TodoList, InputGroup } from './';
 
-function Todo() {
-  const [todo, setTodo] = useState("");
+export function Todo() {
+  const [todo, setTodo] = useState('');
   const [datas, setDatas] = useState([]);
 
   useEffect(() => {
     getTodos({ setDatas });
   }, []);
 
-  const submitTodo = (event) => {
+  const submitTodo = event => {
     event.preventDefault();
     postTodo({ todo, setTodo, datas, setDatas });
   };
@@ -35,7 +34,12 @@ function Todo() {
         </div>
       </TodoForm>
 
-      <TodoList datas={datas} setDatas={setDatas} todo={todo} setTodo={setTodo} />
+      <TodoList
+        datas={datas}
+        setDatas={setDatas}
+        todo={todo}
+        setTodo={setTodo}
+      />
     </TodoFrame>
   );
 }
@@ -88,5 +92,3 @@ const TodoForm = styled.form`
     height: 45px;
   }
 `;
-
-export default Todo;

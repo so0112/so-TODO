@@ -1,20 +1,20 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import InputGroup from "../inputGroup/InputGroup";
-import useCheck from "../../hooks/useCheck";
-import { postSignup } from "../../api/axiosSignup";
-import { checkEmail, checkPassword } from "../../function/checkSignup";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { InputGroup } from './';
+import useCheck from '../hooks/useCheck';
+import { postSignup } from '../apis/signup';
+import { checkEmail, checkPassword } from '../utils/checkSignup';
 
-function Signup() {
-  const SIGNUP_URL = `https://pre-onboarding-selection-task.shop/auth/signup`;
+export function Signup() {
+  const SIGNUP_URL = `/auth/signup`;
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   // 유효성 검사 state
   const [isEmail, setIsEmail] = useState(false);
-  const [ispassword, setIsPassword] = useState(false);
+  const [isPassword, setIsPassword] = useState(false);
   const [isError, setIsError] = useState(false);
 
   // 유효성 검사 커스텀 훅
@@ -22,7 +22,7 @@ function Signup() {
   useCheck(checkPassword, password, setIsPassword);
 
   /** 회원가입 axios 요청 버튼 */
-  const submitSignup = (event) => {
+  const submitSignup = event => {
     event.preventDefault();
     postSignup(SIGNUP_URL, email, password, setIsError);
   };
@@ -40,10 +40,10 @@ function Signup() {
         />
         {isError === true ? (
           <ContentCheck>중복된 계정입니다.</ContentCheck>
-        ) : isEmail === true ? (
-          <></>
-        ) : (
-          <ContentCheck>올바른 형식의 이메일을 입력해주세요(@ 필수 포함)</ContentCheck>
+        ) : isEmail === true ? null : (
+          <ContentCheck>
+            올바른 형식의 이메일을 입력해주세요(@ 필수 포함)
+          </ContentCheck>
         )}
 
         <InputGroup
@@ -52,13 +52,11 @@ function Signup() {
           setValue={setPassword}
           type="password"
         />
-        {ispassword === true ? (
-          <></>
-        ) : (
+        {isPassword === true ? null : (
           <ContentCheck>8자 이상의 비밀번호를 입력해주세요</ContentCheck>
         )}
 
-        {isEmail && ispassword ? (
+        {isEmail && isPassword ? (
           <button type="submit" className="allow-signup">
             가입하기
           </button>
@@ -220,5 +218,3 @@ const LoginContainer = styled.div`
     color: gray;
   }
 `;
-
-export default Signup;

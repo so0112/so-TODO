@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import InputGroup from "../inputGroup/InputGroup";
-import { Link } from "react-router-dom";
-import { postLogin } from "../../api/axiosLogin";
-import useCheck from "../../hooks/useCheck";
-import { checkEmail, checkPassword } from "../../function/checkSignup";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { InputGroup } from './';
+import { Link } from 'react-router-dom';
+import { postLogin } from '../apis/login';
+import useCheck from '../hooks/useCheck';
+import { checkEmail, checkPassword } from '../utils/checkSignup';
 
-function Login() {
-  const LOGIN_URL = `https://pre-onboarding-selection-task.shop/auth/signin`;
+export function Login() {
+  const LOGIN_URL = `/auth/signin`;
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isError, setIsError] = useState(false);
 
   // 유효성 검사 state
@@ -22,7 +22,7 @@ function Login() {
   useCheck(checkPassword, password, setIsPassword);
 
   /** 로그인 제출 함수 */
-  const submitLogin = async (event) => {
+  const submitLogin = async event => {
     event.preventDefault();
     postLogin(LOGIN_URL, email, password, setIsError);
   };
@@ -39,9 +39,11 @@ function Login() {
         />
 
         {isEmail === true ? (
-          <></>
+          <div />
         ) : (
-          <ContentCheck>올바른 형식의 이메일을 입력해주세요(@ 필수 포함)</ContentCheck>
+          <ContentCheck>
+            올바른 형식의 이메일을 입력해주세요(@ 필수 포함)
+          </ContentCheck>
         )}
 
         <InputGroup
@@ -53,19 +55,19 @@ function Login() {
         />
 
         {ispassword === true ? (
-          <></>
+          <div />
         ) : (
           <ContentCheck>8자 이상의 비밀번호를 입력해주세요</ContentCheck>
         )}
 
         {isError ? (
           <>
-            <ContentCheck>이메일 또는 비밀번호를 잘못 입력하셨습니다.</ContentCheck>
+            <ContentCheck>
+              이메일 또는 비밀번호를 잘못 입력하셨습니다.
+            </ContentCheck>
             <ContentCheck>입력하신 내용을 다시 확인해주세요.</ContentCheck>
           </>
-        ) : (
-          <></>
-        )}
+        ) : null}
 
         {isEmail && ispassword ? (
           <button type="submit" className="allow-button">
@@ -184,5 +186,3 @@ const ContentCheck = styled.small`
   color: red;
   opacity: 0.8;
 `;
-
-export default Login;

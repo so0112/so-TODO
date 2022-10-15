@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import InputGroup from "../inputGroup/InputGroup";
-import { deleteTodo, postTodoCheck, putModify } from "../../api/axiosTodo";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { InputGroup } from './';
+import { deleteTodo, postTodoCheck, putModify } from '../apis/todo';
 import {
   BsCheckCircle,
   BsCircle,
@@ -9,61 +9,55 @@ import {
   BsFillPencilFill,
   BsCheckLg,
   BsXLg,
-} from "react-icons/bs";
+} from 'react-icons/bs';
 
-function TodoList({ datas, setDatas }) {
+export function TodoList({ datas, setDatas }) {
   const [isModifying, setIsModifying] = useState();
-  const [modifyTodo, setModifyTodo] = useState("");
+  const [modifyTodo, setModifyTodo] = useState('');
 
   const handleCancel = () => {
     setIsModifying();
   };
 
-  const startModify = (el) => {
+  const startModify = el => {
     setIsModifying(el.id);
     setModifyTodo(el.todo);
   };
 
+  const handlePutTodo = (e, { id, isCompleted }) => {
+    e.preventDefault();
+    putModify({
+      id,
+      modifyTodo,
+      isCompleted,
+      setIsModifying,
+      setModifyTodo,
+      setDatas,
+    });
+  };
+
   return (
     <TodoListContainer>
-      <h1>남은 할일 {datas.filter((el) => el.isCompleted === false).length} 개</h1>
-      {datas.map((el) => (
-        <div className="todo-list-area" key={el.id}>
-          {el.isCompleted ? (
+      <h1>
+        남은 할일 {datas.filter(el => el.isCompleted === false).length} 개
+      </h1>
+      {datas.map(({ id, todo, isCompleted, userId }) => (
+        <div className="todo-list-area" key={id}>
+          {isCompleted ? (
             <BsCheckCircle
               className="done check-area"
-              onClick={() =>
-                postTodoCheck({
-                  id: el.id,
-                  todo: el.todo,
-                  isCompleted: el.isCompleted,
-                  setDatas,
-                })
-              }
+              onClick={() => postTodoCheck({ id, todo, isCompleted, setDatas })}
             />
           ) : (
             <BsCircle
               className="doing check-area"
-              onClick={() =>
-                postTodoCheck({ id: el.id, todo: el.todo, isCompleted: el.isCompleted, setDatas })
-              }
+              onClick={() => postTodoCheck({ id, todo, isCompleted, setDatas })}
             />
           )}
           {/* TODO PUT 수정중인 id는 input창 뜨도록 작성 */}
-          {isModifying === el.id ? (
+          {isModifying === id ? (
             <>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  putModify({
-                    id: el.id,
-                    modifyTodo,
-                    isCompleted: el.isCompleted,
-                    setIsModifying,
-                    setModifyTodo,
-                    setDatas,
-                  });
-                }}>
+              <form onSubmit={e => handlePutTodo(e, { id, isCompleted })}>
                 <InputGroup
                   placeholder=""
                   value={modifyTodo}
@@ -74,29 +68,28 @@ function TodoList({ datas, setDatas }) {
               <div className="modify-button-area">
                 <BsCheckLg
                   className="modify-post-button"
-                  onClick={() =>
-                    putModify({
-                      id: el.id,
-                      modifyTodo,
-                      isCompleted: el.isCompleted,
-                      setIsModifying,
-                      setModifyTodo,
-                      setDatas,
-                    })
-                  }
+                  onClick={e => handlePutTodo(e, { id, isCompleted })}
                 />
-                <BsXLg className="modify-cancel-button" onClick={handleCancel} />
+                <BsXLg
+                  className="modify-cancel-button"
+                  onClick={handleCancel}
+                />
               </div>
             </>
           ) : (
             <>
-              <div className={`todo-list ${el.isCompleted ? "done-list" : ""}`}>{el.todo}</div>
+              <div className={`todo-list ${isCompleted ? 'done-list' : ''}`}>
+                {todo}
+              </div>
               <div className="button-area">
-                <BsFillPencilFill className="modify-button" onClick={() => startModify(el)} />
+                <BsFillPencilFill
+                  className="modify-button"
+                  onClick={() => startModify({ id, todo, isCompleted, userId })}
+                />
 
                 <BsFillTrashFill
                   className="delete-button"
-                  onClick={() => deleteTodo({ id: el.id, setDatas })}
+                  onClick={() => deleteTodo({ id: id, setDatas })}
                 />
               </div>
             </>
@@ -178,5 +171,3 @@ const TodoListContainer = styled.div`
     color: red;
   }
 `;
-
-export default TodoList;
