@@ -4,7 +4,7 @@ import axios from "axios";
  * handleLogin(URL, 아이디, 비밀번호, dispatch)
  */
 
-export const postLogin = async (LOGIN_URL, email, password) => {
+export const postLogin = async (LOGIN_URL, email, password, setIsError) => {
   await axios
     .post(
       LOGIN_URL,
@@ -23,6 +23,6 @@ export const postLogin = async (LOGIN_URL, email, password) => {
       window.location.replace("/todo");
     })
     .catch((error) => {
-      console.log(error);
+      setIsError(true);
     });
 };

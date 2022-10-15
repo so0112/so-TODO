@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Todo from "../../components/todo/Todo";
 import styled from "styled-components";
 
-const isLogin = Boolean(localStorage.getItem("token"));
-
 function TodoPage() {
-  if (!isLogin) {
-    window.location.replace("/");
-  }
+  const isLogin = Boolean(localStorage.getItem("token"));
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isLogin) {
+      navigate("/");
+    }
+  }, [isLogin, navigate]);
 
   return (
     <TodoLayout>

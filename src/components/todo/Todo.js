@@ -12,7 +12,7 @@ function Todo() {
     getTodos({ setDatas });
   }, []);
 
-  const submitTodo = async (event) => {
+  const submitTodo = (event) => {
     event.preventDefault();
     postTodo({ todo, setTodo, datas, setDatas });
   };
@@ -24,7 +24,7 @@ function Todo() {
         <div className="todo-input">
           <InputGroup
             className="post-input"
-            placeholder="todo 생성"
+            placeholder="todo 생성하기"
             value={todo}
             setValue={setTodo}
           />
